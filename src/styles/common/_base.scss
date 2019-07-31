@@ -1,0 +1,53 @@
+body,
+input,
+button,
+textarea,
+select,
+option {
+  font: normal $font-size $font;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+a,
+p {
+  word-break: break-all;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.clearfix {
+  zoom: 1;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+    overflow: hidden;
+  }
+}
+
+body {
+  position: relative;
+  max-width: 750Px;
+  min-width: 320Px;
+  margin: 0 auto;
+  color: $text-primary-color;
+  overflow-x: hidden;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}

@@ -1,0 +1,15 @@
+// Font
+$font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-size: 28px;
+
+// Theme
+$primary-color: #6c421d;
+$primary-text-color: #fff;
+$text-primary-color: #333;
+
+// Ratio
+$aspect-ratio: 750 / 640;
+
+// Layout
+$layout-width: 750px;
+$layout-height: 520px * $aspect-ratio;

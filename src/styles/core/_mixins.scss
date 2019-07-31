@@ -1,0 +1,75 @@
+@mixin ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin ellipsis-y($num: 2) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $num;
+  overflow: hidden;
+}
+
+@mixin trs($t: .5s, $dur: ease-out) {
+  transition: $t $dur;
+}
+
+@mixin no-events {
+  pointer-events: none;
+  user-select: none;
+  touch-action: none;
+}
+
+@mixin placeholder($color: #ccc) {
+  // for webkit browser
+  ::-webkit-input-placeholder {
+    color: $color;
+  }
+
+  // for Mozilla Firefox 4 to 15
+  :-moz-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+
+  // for Mozilla Firefox 19+
+  ::-moz-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+
+  // for Internet Explorer 10+
+  :-ms-input-placeholder {
+    color: $color;
+  }
+}
+
+@mixin circle($r, $c) {
+  width: $r;
+  height: $r;
+  border-radius: 50%;
+  background-color: $c;
+  @content;
+}
+
+@mixin bg-full {
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+@mixin bg-contain {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+@mixin bg ($name, $ext: ".png") {
+  background-image: url("../assets/img/#{$name}#{$ext}");
+  @content;
+}
+
+@mixin trf ($trf...) {
+  transform: translateZ(0) $trf;
+}
