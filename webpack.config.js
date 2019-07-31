@@ -1,11 +1,24 @@
 const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ImageminPlugin = require('imagemin-webpack-plugin').default
+const imageminMozjpeg = require('imagemin-mozjpeg')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const PreloadWebpackPlugin = require('preload-webpack-plugin')
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 
-const { NODE_ENV = 'production' } = process.env
-const { plugins } = require('./project.config')
+const {
+  NODE_ENV = 'production',
+  APP_BUNDLE_ANALYZER = false
+} = process.env
+const projectConfig = require('./config.json')
 const resolve = (...args) => path.resolve(__dirname, ...args)
+const getPublicPath = () => NODE_ENV === 'production' ? './' : '/'
 
 const rules = [
   {
@@ -84,6 +97,60 @@ const rules = [
   }
 ]
 
+const plugins = [
+  new MiniCssExtractPlugin({
+    filename: 'static/css/[name].[contenthash:8].css',
+    chunkFilename: 'static/css/[name].[contenthash:8].css'
+  }),
+  new HtmlWebpackPlugin({
+    ...projectConfig,
+    publicPath: getPublicPath(),
+    filename: 'index.html',
+    template: './src/pug/index.pug',
+    inject: true,
+    minify: {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeAttributeQuotes: true
+    }
+  }),
+  new PreloadWebpackPlugin({
+    rel: 'preload',
+    include: 'allChunks'
+  }),
+  new CopyWebpackPlugin([
+    { from: 'public', to: '' }
+  ]),
+  ...(
+    NODE_ENV === 'production'
+      ? [
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new CleanWebpackPlugin(),
+        new ImageminPlugin({
+          pngquant: { quality: '65-80' },
+          plugins: [
+            imageminMozjpeg({
+              quality: 70,
+              progressive: true
+            })
+          ]
+        })
+      ]
+      : [
+        new webpack.HotModuleReplacementPlugin(),
+        new FriendlyErrorsPlugin({
+          compilationSuccessInfo: {
+            messages: ['Your application is running here http://127.0.0.1:9527']
+          },
+          clearConsole: true
+        })
+      ]
+  ),
+  ...(
+    APP_BUNDLE_ANALYZER ? [new BundleAnalyzerPlugin()] : []
+  )
+]
+
 module.exports = {
   mode: NODE_ENV === 'development' ? 'development' : 'production',
 
@@ -93,7 +160,7 @@ module.exports = {
 
   output: {
     path: resolve('dist'),
-    publicPath: './',
+    publicPath: getPublicPath(),
     filename: 'static/js/[name].[hash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].js'
   },
@@ -111,7 +178,7 @@ module.exports = {
       new UglifyJsPlugin({
         cache: true,
         parallel: true,
-        sourceMap: true
+        sourceMap: false
       }),
       new OptimizeCSSAssetsPlugin()
     ],
