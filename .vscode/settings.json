@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "[javascript]": {
+    "editor.formatOnSave": false
+  }
+}
