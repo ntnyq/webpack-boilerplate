@@ -3,6 +3,7 @@
  */
 
 const path = require('path')
+const WebpackBar = require('webpackbar')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ESLintWebpackPlugin = require('eslint-webpack-plugin')
@@ -20,14 +21,21 @@ const resolve = (...args) => path.resolve(__dirname, ...args)
 module.exports = {
   mode: isProduction ? 'production' : 'development',
 
+  cache: {
+    type: `filesystem`,
+    buildDependencies: {
+      config: [__filename],
+    },
+  },
+
   entry: {
     app: resolve('src/main.js'),
   },
 
   output: {
     path: resolve('dist'),
-    publicPath: '/',
-    filename: `static/js/[name].[fullhash:8].js`,
+    publicPath: isProduction ? '/' : 'auto',
+    filename: `static/js/[name].[chunkhash:8].js`,
     chunkFilename: `static/js/[name].[chunkhash:8].js`,
   },
 
@@ -69,6 +77,16 @@ module.exports = {
           },
         ],
       },
+
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+        type: 'asset/resource',
+      },
+
+      {
+        test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
+        type: 'asset/inline',
+      },
     ],
   },
 
@@ -78,8 +96,7 @@ module.exports = {
         extractComments: false,
       }),
 
-      new CssMinimizerWebpackPlugin({
-      }),
+      new CssMinimizerWebpackPlugin({}),
     ],
 
     splitChunks: {
@@ -108,20 +125,31 @@ module.exports = {
 
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'public', to: resolve('dist') },
+        {
+          from: 'public',
+          to: resolve('dist'),
+          globOptions: {
+            ignore: ['*.DS_Store'],
+          },
+        },
       ],
     }),
 
     new ESLintWebpackPlugin({
-      extensions: 'js',
+      extensions: ['js'],
       lintDirtyModulesOnly: true,
     }),
 
     ...(isProduction
       ? [
           new CleanWebpackPlugin(),
+          new MiniCssExtractPlugin({
+            filename: 'static/css/[name].[contenthash:8].css',
+            chunkFilename: 'static/css/[name].[contenthash:8].css',
+          }),
         ]
       : [
+          new WebpackBar(),
           new FriendlyErrorsPlugin({
             compilationSuccessInfo: {
               messages: [`Your application is running here http://127.0.0.1:9527`],
@@ -140,8 +168,9 @@ module.exports = {
     open: true,
     port: 9527,
     hot: true,
+    compress: true,
     inline: true,
-    quiet: true,
+    // quiet: true,
     clientLogLevel: 'warning',
     overlay: { // show warnings && errors on page
       warnings: true,
