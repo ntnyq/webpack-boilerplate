@@ -1,7 +1,22 @@
 {
   "editor.formatOnSave": true,
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "vue",
+    "yaml",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "json5"
+  ],
   "[javascript]": {
     "editor.formatOnSave": false
-  }
+  },
+  "cSpell.words": [
+    "corejs"
+  ]
 }

@@ -1,6 +1,5 @@
 import '@/styles/style.scss'
-import _ from 'lodash'
+import camelCase from 'lodash/camelCase'
 
 console.log('Hello world')
-console.log(_.camelCase('hello-world'))
-console.log('123')
+console.log(camelCase('hello-world'))

@@ -2,24 +2,26 @@
  * @file Webpack config
  */
 
-const path = require('path')
-const WebpackBar = require('webpackbar')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ESLintWebpackPlugin = require('eslint-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const TerserWebpackPlugin = require('terser-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin')
+const path = require(`path`)
+const WebpackBar = require(`webpackbar`)
+const CopyWebpackPlugin = require(`copy-webpack-plugin`)
+const HtmlWebpackPlugin = require(`html-webpack-plugin`)
+const ESLintWebpackPlugin = require(`eslint-webpack-plugin`)
+const { CleanWebpackPlugin } = require(`clean-webpack-plugin`)
+const TerserWebpackPlugin = require(`terser-webpack-plugin`)
+const MiniCssExtractPlugin = require(`mini-css-extract-plugin`)
+const { BundleAnalyzerPlugin } = require(`webpack-bundle-analyzer`)
+const CssMinimizerWebpackPlugin = require(`css-minimizer-webpack-plugin`)
 
 const { NODE_ENV, APP_BUNDLE_ANALYZER = false } = process.env
-const isProduction = NODE_ENV === 'production'
+const isProduction = NODE_ENV === `production`
 const resolve = (...args) => path.resolve(__dirname, ...args)
 
+/**
+ * @type {import('webpack').Configuration}
+ */
 module.exports = {
-  mode: isProduction ? 'production' : 'development',
+  mode: isProduction ? `production` : `development`,
 
   cache: {
     type: `filesystem`,
@@ -29,19 +31,19 @@ module.exports = {
   },
 
   entry: {
-    app: resolve('src/main.js'),
+    app: resolve(`src/main.js`),
   },
 
   output: {
-    path: resolve('dist'),
-    publicPath: isProduction ? '/' : 'auto',
+    path: resolve(`dist`),
+    publicPath: isProduction ? `/` : `auto`,
     filename: `static/js/[name].[chunkhash:8].js`,
     chunkFilename: `static/js/[name].[chunkhash:8].js`,
   },
 
   resolve: {
     alias: {
-      '@': resolve('src'),
+      '@': resolve(`src`),
     },
   },
 
@@ -51,9 +53,9 @@ module.exports = {
         test: /.js$/,
         exclude: /node_modules/,
         include: [
-          resolve('src'),
+          resolve(`src`),
         ],
-        loader: 'babel-loader',
+        loader: `babel-loader`,
       },
 
       {
@@ -63,14 +65,14 @@ module.exports = {
             ? {
                 loader: MiniCssExtractPlugin.loader,
                 options: {
-                  publicPath: '../../',
+                  publicPath: `../../`,
                 },
               }
-            : 'style-loader',
-          'css-loader',
-          'postcss-loader',
+            : `style-loader`,
+          `css-loader`,
+          `postcss-loader`,
           {
-            loader: 'sass-loader',
+            loader: `sass-loader`,
             options: {
               additionalData: `@import "@/styles/core/style";`,
             },
@@ -80,12 +82,12 @@ module.exports = {
 
       {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
-        type: 'asset/resource',
+        type: `asset/resource`,
       },
 
       {
         test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
-        type: 'asset/inline',
+        type: `asset/inline`,
       },
     ],
   },
@@ -103,8 +105,8 @@ module.exports = {
       cacheGroups: {
         commons: {
           test: /node_modules/,
-          name: 'vendors',
-          chunks: 'initial',
+          name: `vendors`,
+          chunks: `initial`,
           priority: 10,
           enforce: true,
         },
@@ -112,31 +114,33 @@ module.exports = {
     },
 
     runtimeChunk: {
-      name: 'manifest',
+      name: `manifest`,
     },
   },
 
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Webpack boilerplate',
-      template: resolve('public/index.html'),
-      inject: 'body',
+      title: `Webpack boilerplate`,
+      template: resolve(`index.html`),
+      inject: `body`,
     }),
 
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'public',
-          to: resolve('dist'),
+          from: `public`,
+          to: resolve(`dist`),
           globOptions: {
-            ignore: ['*.DS_Store'],
+            ignore: [
+              `*.DS_Store`,
+            ],
           },
         },
       ],
     }),
 
     new ESLintWebpackPlugin({
-      extensions: ['js'],
+      extensions: [`js`],
       lintDirtyModulesOnly: true,
     }),
 
@@ -144,18 +148,12 @@ module.exports = {
       ? [
           new CleanWebpackPlugin(),
           new MiniCssExtractPlugin({
-            filename: 'static/css/[name].[contenthash:8].css',
-            chunkFilename: 'static/css/[name].[contenthash:8].css',
+            filename: `static/css/[name].[contenthash:8].css`,
+            chunkFilename: `static/css/[name].[contenthash:8].css`,
           }),
         ]
       : [
           new WebpackBar(),
-          new FriendlyErrorsPlugin({
-            compilationSuccessInfo: {
-              messages: [`Your application is running here http://127.0.0.1:9527`],
-            },
-            clearConsole: true,
-          }),
         ]),
 
     ...(isProduction && APP_BUNDLE_ANALYZER
@@ -164,17 +162,18 @@ module.exports = {
   ],
 
   devServer: {
-    contentBase: resolve('dist'),
     open: true,
     port: 9527,
     hot: true,
     compress: true,
-    inline: true,
-    // quiet: true,
-    clientLogLevel: 'warning',
-    overlay: { // show warnings && errors on page
-      warnings: true,
-      errors: true,
+    static: {
+      directory: resolve(`dist`),
+    },
+    client: {
+      overlay: {
+        warnings: true,
+        errors: true,
+      },
     },
   },
 
