@@ -1,22 +1,17 @@
 {
   "editor.formatOnSave": true,
   "eslint.validate": [
-    "javascript",
-    "typescript",
-    "javascriptreact",
-    "typescriptreact",
     "vue",
     "yaml",
     "html",
-    "markdown",
     "json",
     "jsonc",
-    "json5"
+    "json5",
+    "markdown",
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
   ],
-  "[javascript]": {
-    "editor.formatOnSave": false
-  },
-  "cSpell.words": [
-    "corejs"
-  ]
+  "cSpell.words": ["browserslistrc", "corejs"]
 }
