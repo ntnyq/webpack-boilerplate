@@ -1,15 +1,10 @@
-@import "~normalize.scss";
+@forward "~normalize.scss";
 
-.container {
+#app {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
   height: 100vh;
-}
-
-h1 {
-  font-size: 60px;
-  color: $primary-color;
 }

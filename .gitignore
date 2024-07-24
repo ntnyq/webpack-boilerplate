@@ -1,21 +1,14 @@
 .DS_Store
 node_modules
+
 *.local
 *.log*
 
 # Linter report
 .report
 
-# Editor directories and files
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
 # We use Yarn
 package-lock.json
 
 # Production
-/dist
+dist

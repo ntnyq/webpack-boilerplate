@@ -1,7 +1,5 @@
-import { ntnyq } from '@ntnyq/eslint-config'
+// @ts-check
 
-export default ntnyq([
-  {
-    ignores: ['.browserslistrc'],
-  },
-])
+import { defineESLintConfig } from '@ntnyq/eslint-config'
+
+export default defineESLintConfig()
