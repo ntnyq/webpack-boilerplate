@@ -2,20 +2,20 @@
  * @file Webpack config
  */
 
-const path = require('node:path')
-const process = require('node:process')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const CssMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const TerserWebpackPlugin = require('terser-webpack-plugin')
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
-const WebpackBar = require('webpackbar')
+import path from 'node:path'
+import process from 'node:process'
+import { CleanWebpackPlugin } from 'clean-webpack-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
+import CssMinimizerWebpackPlugin from 'css-minimizer-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import TerserWebpackPlugin from 'terser-webpack-plugin'
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+import WebpackBar from 'webpackbar'
 
 const { APP_BUNDLE_ANALYZER = false, NODE_ENV } = process.env
 const isProduction = NODE_ENV === 'production'
-const resolve = (...args) => path.resolve(__dirname, ...args)
+const resolve = (...args: string[]) => path.resolve(__dirname, ...args)
 
 /**
  * @type {import('webpack').Configuration}
@@ -45,7 +45,7 @@ module.exports = {
   },
 
   entry: {
-    app: resolve('src/main.js'),
+    app: resolve('src/main.ts'),
   },
 
   mode: isProduction ? 'production' : 'development',
@@ -55,8 +55,15 @@ module.exports = {
       {
         exclude: /node_modules/,
         include: [resolve('src')],
-        loader: 'babel-loader',
-        test: /.js$/,
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+          },
+          {
+            loader: 'ts-loader',
+          },
+        ],
       },
 
       {
@@ -164,5 +171,6 @@ module.exports = {
     alias: {
       '@': resolve('src'),
     },
+    extensions: ['.tsx', '.ts', '.js'],
   },
 }
