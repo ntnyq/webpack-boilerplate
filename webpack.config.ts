@@ -21,24 +21,28 @@ const resolve = (...args: string[]) => path.resolve(__dirname, ...args)
  * @type {import('webpack').Configuration}
  */
 module.exports = {
+  mode: isProduction ? 'production' : 'development',
+
+  node: false,
+
   cache: {
+    type: 'filesystem',
     buildDependencies: {
       config: [__filename],
     },
-    type: 'filesystem',
   },
 
   devServer: {
+    compress: true,
+    hot: true,
+    open: true,
+    port: 9527,
     client: {
       overlay: {
         errors: true,
         warnings: true,
       },
     },
-    compress: true,
-    hot: true,
-    open: true,
-    port: 9527,
     static: {
       directory: resolve('dist'),
     },
@@ -47,8 +51,6 @@ module.exports = {
   entry: {
     app: resolve('src/main.ts'),
   },
-
-  mode: isProduction ? 'production' : 'development',
 
   module: {
     rules: [
@@ -100,8 +102,6 @@ module.exports = {
     ],
   },
 
-  node: false,
-
   optimization: {
     minimizer: [
       new TerserWebpackPlugin({
@@ -146,10 +146,10 @@ module.exports = {
       patterns: [
         {
           from: 'public',
+          to: resolve('dist'),
           globOptions: {
             ignore: ['*.DS_Store'],
           },
-          to: resolve('dist'),
         },
       ],
     }),
@@ -164,13 +164,15 @@ module.exports = {
         ]
       : [new WebpackBar()]),
 
-    ...(isProduction && APP_BUNDLE_ANALYZER ? [new BundleAnalyzerPlugin()] : []),
+    ...(isProduction && APP_BUNDLE_ANALYZER
+      ? [new BundleAnalyzerPlugin()]
+      : []),
   ],
 
   resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
     alias: {
       '@': resolve('src'),
     },
-    extensions: ['.tsx', '.ts', '.js'],
   },
 }

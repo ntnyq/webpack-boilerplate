@@ -1,5 +1,5 @@
 import '@/styles/style.scss'
-import camelCase from 'lodash/camelCase'
+import { camelCase } from 'es-toolkit'
 
 console.log('Hello world')
 console.log(camelCase('hello-world'))

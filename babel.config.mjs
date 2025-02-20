@@ -2,7 +2,9 @@
  * @file Babel config
  */
 
-module.exports = {
+// @ts-check
+
+export default /** @type {import('@babel/core').TransformOptions} */ ({
   presets: [
     [
       '@babel/preset-env',
@@ -13,4 +15,4 @@ module.exports = {
       },
     ],
   ],
-}
+})

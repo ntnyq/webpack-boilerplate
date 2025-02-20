@@ -7,8 +7,5 @@ node_modules
 # Linter report
 .report
 
-# We use Yarn
-package-lock.json
-
 # Production
 dist
