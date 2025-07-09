@@ -12,15 +12,14 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import TerserWebpackPlugin from 'terser-webpack-plugin'
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 import WebpackBar from 'webpackbar'
+import type { Configuration } from 'webpack'
+import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
 
 const { APP_BUNDLE_ANALYZER = false, NODE_ENV } = process.env
 const isProduction = NODE_ENV === 'production'
 const resolve = (...args: string[]) => path.resolve(__dirname, ...args)
 
-/**
- * @type {import('webpack').Configuration}
- */
-module.exports = {
+export default {
   mode: isProduction ? 'production' : 'development',
 
   node: false,
@@ -175,4 +174,4 @@ module.exports = {
       '@': resolve('src'),
     },
   },
-}
+} satisfies Configuration & DevServerConfiguration

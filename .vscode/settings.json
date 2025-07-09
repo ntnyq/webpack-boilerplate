@@ -23,5 +23,5 @@
     "typescriptreact"
   ],
   "cSpell.allowCompoundWords": true,
-  "cSpell.words": ["browserslistrc", "corejs"]
+  "cSpell.words": ["browserslistrc", "corejs", "esbuild", "unrs"]
 }

@@ -3,19 +3,21 @@
     "target": "ESNext",
     "lib": ["DOM", "ESNext"],
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
     "types": ["node"],
+    "erasableSyntaxOnly": true,
     "allowJs": true,
     "outDir": "dist",
+    "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true
   },
+  "include": ["./src/**/*.ts", "./*.config.*"],
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "Commonjs"
     }
-  },
-  "include": ["./src/**/*.ts", "./*.config.*"]
+  }
 }
